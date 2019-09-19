@@ -24,6 +24,7 @@ namespace example
 
             services.AddSingleton<DataStore>();
 
+            // this is an extension method written in this project
             services.AddGraphQLAuth(_ =>
             {
                 _.AddPolicy("AdminPolicy", p => p.RequireClaim("role", "admin"));
