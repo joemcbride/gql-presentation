@@ -18,29 +18,49 @@ namespace example
             services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
 
             // custom types
-            services.AddTransient<LowercaseDirectiveVisitor>();
-            services.AddTransient<RestDirectiveVisitor>();
+            services.AddTransient<QueryType>();
+            services.AddTransient<MutationType>();
+            services.AddTransient<DroidType>();
+
+            services.AddSingleton<DataStore>();
 
             services.AddTransient<ISchema>(s =>
             {
                 return Schema.For(@"
-                    directive @lower on FIELD_DEFINITION
-                    directive @rest(url: String) on FIELD_DEFINITION
-
                     type Droid {
-                      id: ID
-                      name: String @lower
+                        id: ID!
+                        name: String!
+                        primaryFunction: String
+                        description: String
+                        appearsIn: [Episode!]!
+                    }
+
+                    enum Episode {
+                        NEWHOPE
+                        EMPIRE
+                        JEDI
                     }
 
                     type Query {
-                      hero: Droid @rest(url: ""http://localhost:3030/api/character/3"")
+                        hero: Droid
+                        droid(id: ID!): Droid
+                    }
+
+                    input UpdateDroid {
+                        id: ID!
+                        name: String!
+                        primaryFunction: String
+                    }
+
+                    type Mutation {
+                        updateDroid(droid: UpdateDroid!): Droid
                     }
                 ", _ =>
                 {
                     _.ServiceProvider = s;
-                    _.RegisterDirectiveVisitor<RestDirectiveVisitor>("rest");
-                    _.RegisterDirectiveVisitor<LowercaseDirectiveVisitor>("lower");
-                    _.ResolveAsRestType("Droid", "id", "name");
+                    _.Types.Include<QueryType>();
+                    _.Types.Include<MutationType>();
+                    _.Types.Include<DroidType>();
                 });
             });
         }

@@ -18,6 +18,7 @@ namespace basic
 
               type Query {
                   hero: Droid
+                  droid(id: ID!) : Droid
               }
             ", _ =>
             {
@@ -27,7 +28,25 @@ namespace basic
 
             var json = schema.Execute(_ =>
             {
-                _.Query = @"{ hero { id name primaryFunction description } }";
+                _.Query = @"
+                {
+                  hero {
+                    id
+                    name
+                    primaryFunction
+                    description
+                  }
+                }";
+
+                // _.Query = @"
+                // {
+                //   droid(id: 27) {
+                //     id
+                //     name
+                //     primaryFunction
+                //     description
+                //   }
+                // }";
                 _.ExposeExceptions = true;
             });
 
@@ -59,6 +78,11 @@ namespace basic
         public Droid Hero()
         {
             return new Droid { Id = 1, Name = "R2-D2", Function = "astromech" };
+        }
+
+        public Droid Droid(int id)
+        {
+            return new Droid { Id = id, Name = "R2-D2", Function = "astromech" };
         }
     }
 }

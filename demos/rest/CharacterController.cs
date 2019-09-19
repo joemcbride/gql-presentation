@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Net;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -22,7 +23,13 @@ namespace example
             _logger.LogInformation($"Fetching character {id}");
 
             var character = await _data.GetCharacter(id);
-            return Json(character);
+
+            if (character != null)
+            {
+                return Json(character);
+            }
+
+            return StatusCode((int)HttpStatusCode.NotFound);
         }
     }
 }

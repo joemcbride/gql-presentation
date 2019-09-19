@@ -9,6 +9,25 @@ using System.Threading.Tasks;
 
 namespace example
 {
+    public class LowercaseDirectiveVisitor : SchemaDirectiveVisitor
+    {
+        public override void VisitField(FieldType field)
+        {
+            var inner = field.Resolver ?? new JObjectFieldResolver();
+            field.Resolver = new FuncFieldResolver<object>(context =>
+            {
+                var result = inner.Resolve(context);
+
+                if (result is string str)
+                {
+                    return str.ToLowerInvariant();
+                }
+
+                return result;
+            });
+        }
+    }
+
     public class RestDirectiveVisitor : SchemaDirectiveVisitor
     {
         public override void VisitField(FieldType field)
