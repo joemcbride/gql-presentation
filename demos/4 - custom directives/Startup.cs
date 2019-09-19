@@ -42,6 +42,39 @@ namespace example
                     _.RegisterDirectiveVisitor<LowercaseDirectiveVisitor>("lower");
                     _.ResolveAsRestType("Droid", "id", "name");
                 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                const string example = @"
+                  directive @auth(
+                    requires: Role = ADMIN,
+                  ) on OBJECT | FIELD_DEFINITION
+
+                  enum Role {
+                    ADMIN
+                    REVIEWER
+                    USER
+                    UNKNOWN
+                  }
+
+                  type User @auth(requires: USER) {
+                    name: String
+                    banned: Boolean @auth(requires: ADMIN)
+                    canPost: Boolean @auth(requires: REVIEWER)
+                  }
+                  ";
             });
         }
 
@@ -56,4 +89,5 @@ namespace example
             app.UseGraphQLPlayground();
         }
     }
+
 }
