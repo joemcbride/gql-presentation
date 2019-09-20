@@ -8,7 +8,7 @@
 * Documentation: https://graphql-dotnet.github.io/docs/getting-started/introduction
 * ASP.NET Core Server project: https://github.com/graphql-dotnet/server
 * Authorization Project: https://github.com/graphql-dotnet/authorization
-* Addtitional Examples: https://github.com/graphql-dotnet/examples
+* Additional Examples: https://github.com/graphql-dotnet/examples
 
 # Alternatives
 
